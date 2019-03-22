@@ -1,0 +1,134 @@
+<!-- 
+  Basic Form Example for testing
+    - Fields are tightly coupled with the API functionality
+    - Validation and error messages are returned from the server
+    - message: contains unordered list of issues
+    - fields: array of form ID selectors with issues
+    - JavaScript to handle basic form POST submission
+ -->
+<form id="myForm" action="/v1/support" method="post">
+  <legend>Support Form</legend>
+  <p>
+    <label for="firstName">First Name</label>
+    <input id="firstName" name="firstName" type="text" />
+  </p>
+  <p>
+    <label for="lastName">Last Name</label>
+    <input id="lastName" name="lastName" type="text" />
+  </p>
+  <p>
+    <label for="email">Email *</label>
+    <input id="email" name="email" type="text" />
+  </p>
+  <p>
+    <label for="storeUrl">Store URL</label>
+    <input id="storeUrl" name="storeUrl" type="text" />
+  </p>
+  <p>
+    <label for="storePassword">Storefront Password</label>
+    <input id="storePassword" name="storePassword" type="text" />
+  </p>
+  <p>
+    <label for="theme">Theme</label>
+    <select id="theme" name="theme">
+      <option value="" disabled selected>Choose a theme</option>
+      <option value="District">District</option>
+      <option value="Laguna">Laguna</option>
+    </select>
+  </p>
+  <p>
+    <label for="subject">Subject</label>
+    <input id="subject" name="subject" type="text" />
+  </p>
+  <p>
+    <label for="message">Message *</label>
+    <textarea id="message" name="message"></textarea>
+  </p>
+  <p>
+    <label for="attachment">Attachement</label>
+    <input type="file" name="attachment" id="attachment" />
+  </p>
+  <p>
+    <button type="submit">Submit</button>
+  </p>
+</form>
+
+<div class="response"></div>
+
+<style>
+  .hide {
+    display: none;
+  }
+  .response {
+    opacity: 0;
+    padding: 1em;
+    border-radius: 0.5em;
+    border: 4px solid rgba(200, 200, 200);
+    background: rgba(200, 200, 200, 0.2);
+    width: 100%;
+    max-width: 600px;
+    transition: all 400ms ease-in-out;
+  }
+  .response--success {
+    opacity: 1;
+    border: 4px solid green;
+    background: rgba(0, 128, 0, 0.2);
+  }
+  .response--error {
+    opacity: 1;
+    border: 4px solid red;
+    background: rgba(128, 0, 0, 0.2);
+  }
+  pre {
+    background: white;
+    padding: 1em;
+    border-radius: 0.5em;
+  }
+</style>
+
+<script>
+  window.addEventListener('load', function() {
+    function sendData() {
+      var XHR = new XMLHttpRequest();
+
+      var form = document.getElementById('myForm');
+
+      // Bind the FormData object and the form element
+      var FD = new FormData(form);
+
+      XHR.addEventListener('load', function(event) {
+        // Get the server response for success / error validation
+        var response = JSON.parse(event.target.responseText);
+        var responseBox = document.querySelector('.response');
+        responseBox.className = 'response';
+
+        // Handle responses
+        if (response.status === 'error') {
+          responseBox.classList.add('response--error');
+        } else {
+          // Success
+          responseBox.classList.add('response--success');
+          form.classList.add('hide');
+        }
+
+        // Pass response back to HTML for debugging
+        responseBox.innerHTML = `<h3>${response.message}</h3>
+        <pre>${JSON.stringify(response.data, null, 2)}</pre>`;
+      });
+
+      XHR.addEventListener('error', function(event) {
+        console.log('error', 'Oops! Something went wrong.');
+      });
+
+      XHR.open('POST', '/v1/support', true);
+      XHR.send(FD);
+    }
+
+    var form = document.getElementById('myForm');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      sendData();
+    });
+  });
+</script>

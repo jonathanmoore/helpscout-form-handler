@@ -1,0 +1,30 @@
+{
+  "name": "helpscout-form-handler",
+  "version": "1.0.0",
+  "description": "Simple custom form handler for Help Scout",
+  "main": "index.js",
+  "repository": "https://github.com/jonathanmoore/helpscout-form-handler",
+  "author": "Jonathan Moore",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "browser-detect": "^0.2.28",
+    "dotenv": "^7.0.0",
+    "eslint": "^5.14.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "express": "^4.16.4",
+    "express-formidable": "^1.2.0",
+    "geoip-lite": "^1.3.6",
+    "helpscout-2.0": "^1.1.5",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.4.18",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
+    "request-ip": "^2.1.3",
+    "validator": "^10.11.0"
+  }
+}
